@@ -1,6 +1,16 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import * as Dialog from "@radix-ui/react-dialog";
 
+interface TypeTransactionButtonProps {
+  typeTransaction: "positive" | "negative";
+  isActive: boolean;
+}
+export const Root = styled(Dialog.Root)`
+  width: 100%;
+  @media (min-width: 768px) {
+    width: 100px;
+  }
+`;
 export const NewTransactionButton = styled.button`
   height: 50px;
   border: 0;
@@ -25,7 +35,7 @@ export const Overlay = styled(Dialog.Overlay)`
   background-color: rgba(0, 0, 0, 0.65);
 `;
 export const Content = styled(Dialog.Content)`
-  min-width: 32rem;
+  min-width: 30rem;
   border-radius: 6px;
   padding: 2.5rem 3rem;
   background-color: ${(props) => props.theme["gray-800"]};
@@ -55,6 +65,10 @@ export const Content = styled(Dialog.Content)`
       color: ${({ theme }) => theme["gray-500"]};
     }
   }
+  @media (max-width: 767px) {
+    height: 100vh;
+    align-items: center;
+  }
 `;
 
 export const Title = styled(Dialog.Title)``;
@@ -64,6 +78,9 @@ export const HeaderModal = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  @media (max-width: 767px) {
+    margin-bottom: 150px;
+  }
 `;
 
 export const Close = styled(Dialog.Close)`
@@ -71,6 +88,7 @@ export const Close = styled(Dialog.Close)`
   cursor: pointer;
   outline: 0;
   border: 0;
+  line-height: 0;
   color: ${({ theme }) => theme["gray-300"]};
 `;
 
@@ -87,4 +105,62 @@ export const ButtonRegister = styled.button`
     transition: 300ms;
     background: ${(props) => props.theme["green-700"]};
   }
+
+  @media (max-width: 767px) {
+    margin-top: 150px;
+  }
+`;
+
+export const TransactionTypeContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+`;
+
+export const TransactionTypeButton = styled.div<TypeTransactionButtonProps>`
+  border: 0;
+  width: 48%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border-radius: 6px;
+  height: 50px;
+  background-color: ${({ theme }) => theme["gray-700"]};
+  ${({ isActive, theme, typeTransaction }) =>
+    isActive &&
+    typeTransaction === "positive" &&
+    css`
+      background-color: ${theme["green-700"]};
+    `};
+
+  ${({ isActive, theme, typeTransaction }) =>
+    isActive &&
+    typeTransaction === "negative" &&
+    css`
+      background-color: ${theme["red-700"]};
+    `};
+  cursor: pointer;
+
+  &:hover {
+    transition: 300ms;
+    ${({ theme, typeTransaction }) =>
+      typeTransaction === "positive" &&
+      css`
+        background-color: ${theme["green-500"]};
+      `};
+
+    ${({ theme, typeTransaction }) =>
+      typeTransaction === "negative" &&
+      css`
+        background-color: ${theme["red-500"]};
+      `};
+  }
+`;
+
+export const TextButton = styled.span`
+  color: ${({ theme }) => theme.white};
 `;

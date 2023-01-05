@@ -8,7 +8,32 @@ import {
 } from "./styles";
 import { ArrowCircleUp, ArrowCircleDown, CurrencyDollar } from "phosphor-react";
 import { defaultTheme } from "../../styles/themes/default";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { priceFormatted } from "../../utils/formatter";
 function Summary() {
+  const { transactions } = useSelector(
+    (state: RootState) => state.transactions
+  );
+
+  const summary = transactions.reduce(
+    (acc: any, transaction: any) => {
+      if (transaction.transactionType === "positive") {
+        acc.positive += transaction.amount;
+        acc.total += transaction.amount;
+      } else {
+        acc.negative += transaction.amount;
+        acc.total -= transaction.amount;
+      }
+
+      return acc;
+    },
+    {
+      positive: 0,
+      negative: 0,
+      total: 0,
+    }
+  );
   return (
     <SummaryContainer>
       <SummaryCard>
@@ -16,21 +41,21 @@ function Summary() {
           <TitleCard>Entradas</TitleCard>
           <ArrowCircleUp size={32} color={defaultTheme["green-300"]} />
         </HeaderCard>
-        <AmountCard>R$ 17.400,00</AmountCard>
+        <AmountCard>{priceFormatted.format(summary.positive)}</AmountCard>
       </SummaryCard>
       <SummaryCard>
         <HeaderCard>
           <TitleCard>Saídas</TitleCard>
           <ArrowCircleDown size={32} color={defaultTheme["red-300"]} />
         </HeaderCard>
-        <AmountCard>R$ 2.400,00</AmountCard>
+        <AmountCard>{priceFormatted.format(summary.negative)}</AmountCard>
       </SummaryCard>
       <SummaryCard variant="green">
         <HeaderCard>
           <TitleCard>Total</TitleCard>
           <CurrencyDollar size={32} color={defaultTheme.white} />
         </HeaderCard>
-        <AmountCard>R$ 15.000,00</AmountCard>
+        <AmountCard>{priceFormatted.format(summary.total)}</AmountCard>
       </SummaryCard>
     </SummaryContainer>
   );

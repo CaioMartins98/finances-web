@@ -6,7 +6,7 @@ function SearchForm() {
   return (
     <SearchFormContainer>
       <input type="text" placeholder="Buscar transações" />
-      <button type="submit">
+      <button>
         <MagnifyingGlass size={20} /> Buscar
       </button>
     </SearchFormContainer>

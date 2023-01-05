@@ -1,6 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const INITIAL_STATE: any = [];
+interface TransactionsProps {
+  id: string;
+  description: string;
+  amount: number;
+  category: string;
+  date: Date;
+  transactionType: string;
+}
+const INITIAL_STATE: TransactionsProps[] = [];
 
 const transactionSlice = createSlice({
   name: "transaction",
@@ -9,8 +17,11 @@ const transactionSlice = createSlice({
     addTransaction: (state, { payload }) => {
       return [...state, payload];
     },
+    removeTransaction: (state, { payload }) => {
+      return (state = state.filter((item: any) => item.id !== payload));
+    },
   },
 });
 
-export const { addTransaction } = transactionSlice.actions;
+export const { addTransaction, removeTransaction } = transactionSlice.actions;
 export default transactionSlice.reducer;
