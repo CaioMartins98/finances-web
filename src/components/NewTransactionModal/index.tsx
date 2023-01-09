@@ -47,7 +47,6 @@ function NewTransactionModal() {
       transactionType,
       date: date.toLocaleDateString("pt-BR"),
     };
-    console.log("data", data);
     dispatch(addTransaction(data));
     clearData();
   };

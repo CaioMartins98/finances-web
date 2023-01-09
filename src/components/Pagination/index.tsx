@@ -6,7 +6,6 @@ interface PaginationProps {
   setCurrentPage: (value: any) => void;
 }
 function Pagination({ pages, currentPage, setCurrentPage }: PaginationProps) {
-  console.log(pages);
   return (
     <>
       <Container>
