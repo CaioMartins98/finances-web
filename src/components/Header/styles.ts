@@ -17,3 +17,19 @@ export const HeaderContent = styled.div`
   align-items: center;
   justify-content: space-between;
 `;
+
+export const NewTransactionButton = styled.button`
+  height: 50px;
+  border: 0;
+  background: ${(props) => props.theme["green-500"]};
+  color: ${(props) => props.theme.white};
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 0 1.25rem;
+  font-weight: bold;
+
+  &:hover {
+    transition: 300ms;
+    background: ${(props) => props.theme["green-700"]};
+  }
+`;

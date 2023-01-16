@@ -22,7 +22,7 @@ export const Overlay = styled(Dialog.Overlay)`
 export const Content = styled(Dialog.Content)`
   min-width: 30rem;
   border-radius: 6px;
-  padding: 2.5rem 3rem;
+
   background-color: ${(props) => props.theme["gray-800"]};
   position: fixed;
 
@@ -37,14 +37,34 @@ export const Content = styled(Dialog.Content)`
   gap: 1rem;
 `;
 
-export const Title = styled(Dialog.Title)``;
+export const Title = styled(Dialog.Title)`
+  font-size: 20px;
+  padding: 20px;
+`;
 
+export const DescriptionContainer = styled.span`
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+`;
+export const Description = styled.span`
+  font-size: 20px;
+  text-align: center;
+  line-height: 30px;
+`;
+
+export const Divider = styled.div`
+  width: 100%;
+
+  border-top: 0.5px solid ${({ theme }) => theme.white};
+`;
 export const FooterModal = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  padding: 20px;
 `;
 
 export const Close = styled(Dialog.Close)`

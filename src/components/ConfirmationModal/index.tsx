@@ -5,16 +5,19 @@ import {
   ButtonConfirmation,
   Close,
   Content,
+  Description,
+  DescriptionContainer,
+  Divider,
   FooterModal,
   Overlay,
   Root,
   Title,
 } from "./styles";
-import { X, TrashSimple } from "phosphor-react";
+import { X, TrashSimple, Trash } from "phosphor-react";
 import { priceFormatted } from "../../utils/formatter";
 interface ItemProps {
   description: string;
-  amount: string;
+  amount: number;
   category: string;
 }
 interface ModalProps {
@@ -26,7 +29,7 @@ export default function ConfirmationModal({ item, handleConfirm }: ModalProps) {
     <Root>
       <Dialog.Trigger asChild>
         <div>
-          <TrashSimple />
+          <Trash />
         </div>
       </Dialog.Trigger>
 
@@ -34,15 +37,18 @@ export default function ConfirmationModal({ item, handleConfirm }: ModalProps) {
         <Overlay />
         <Content>
           <Title>Remover transação</Title>
-          <span>
-            Tem certeza que deseja remover a transação{" "}
-            <strong>{item.description}</strong>
-          </span>
-          <span>
-            da categoria <strong>{item.category}</strong> no valor de{" "}
-            <strong>{priceFormatted.format(item.amount)}</strong>?
-          </span>
-
+          <Divider />
+          <DescriptionContainer>
+            <Description>
+              Tem certeza que deseja remover a transação{" "}
+              <strong>{item.description}</strong>
+            </Description>
+            <Description>
+              da categoria <strong>{item.category}</strong> no valor de{" "}
+              <strong>{priceFormatted.format(item.amount)}</strong>?
+            </Description>
+          </DescriptionContainer>
+          <Divider />
           <FooterModal>
             <ButtonConfirmation onClick={handleConfirm}>
               Confirmar

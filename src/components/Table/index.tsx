@@ -15,6 +15,43 @@ import { priceFormatted } from "../../utils/formatter";
 import Pagination from "../Pagination";
 import { Funnel, Check } from "phosphor-react";
 import * as Select from "@radix-ui/react-select";
+import { toast } from "react-hot-toast";
+import SelectOrder from "../SelectOrder";
+
+interface ItemTableProps {
+  item: {
+    description: string;
+    transactionType: "positive" | "negative";
+    id: string;
+    amount: number;
+    category: string;
+    date: string;
+  };
+  handleConfirm: () => void;
+}
+
+const ItemTable = ({ item, handleConfirm }: ItemTableProps) => {
+  return (
+    <>
+      <tr key={item.id}>
+        <td width="40%">{item.description}</td>
+        <td width="30%">
+          <PriceHighlight type={item.transactionType}>
+            {item.transactionType === "negative" && "-"}{" "}
+            {priceFormatted.format(item.amount)}
+          </PriceHighlight>
+        </td>
+        <td>{item.category}</td>
+        <td>{item.date}</td>
+        <td>
+          <div style={{ cursor: "pointer" }}>
+            <ConfirmationModal item={item} handleConfirm={handleConfirm} />
+          </div>
+        </td>
+      </tr>
+    </>
+  );
+};
 
 function Table() {
   const transactions = useSelector((state: RootState) => state.transactions);
@@ -46,49 +83,28 @@ function Table() {
 
   const deleteTransaction = (id: string) => {
     dispatch(removeTransaction(id));
+    toast.success("Transação removida com sucesso!", {
+      style: {
+        border: "1px solid #00875F",
+        padding: "16px",
+        color: "#fff",
+        background: "#202024",
+      },
+      iconTheme: {
+        primary: "#00875F",
+        secondary: "#FFFAEE",
+      },
+    });
   };
+
+  useEffect(() => {
+    setCurrentPage(0);
+    setCurrentPageFiltered(0);
+  }, [order]);
 
   return (
     <>
-      <Select.Root value={order} onValueChange={setOrder}>
-        <Select.Trigger>
-          <Select.Icon>
-            <Funnel />
-          </Select.Icon>
-          <Select.Value placeholder="Filtro" />
-        </Select.Trigger>
-        <Select.Portal>
-          <Select.Content>
-            <Select.Viewport
-              style={{
-                backgroundColor: "#333333",
-                width: 200,
-                cursor: "pointer",
-              }}
-            >
-              <Select.Item value="all">
-                <Select.ItemText>Todos</Select.ItemText>
-                <Select.ItemIndicator className="SelectItemIndicator">
-                  <Check />
-                </Select.ItemIndicator>
-              </Select.Item>
-              <Select.Item value="positive">
-                <Select.ItemText>Entrada</Select.ItemText>
-                <Select.ItemIndicator className="SelectItemIndicator">
-                  <Check />
-                </Select.ItemIndicator>
-              </Select.Item>
-              <Select.Item value="negative">
-                <Select.ItemText>Saída</Select.ItemText>
-                <Select.ItemIndicator className="SelectItemIndicator">
-                  <Check />
-                </Select.ItemIndicator>
-              </Select.Item>
-            </Select.Viewport>
-          </Select.Content>
-        </Select.Portal>
-      </Select.Root>
-
+      <SelectOrder order={order} setOrder={setOrder} />
       {order === "all" ? (
         <>
           <Pagination
@@ -117,49 +133,19 @@ function Table() {
                   {order === "all" ? (
                     <>
                       {currentItens.map((item: any) => (
-                        <tr key={item.id}>
-                          <td width="50%">{item.description}</td>
-                          <td width="20%">
-                            <PriceHighlight type={item.transactionType}>
-                              {item.transactionType === "negative" && "-"}{" "}
-                              {priceFormatted.format(item.amount)}
-                            </PriceHighlight>
-                          </td>
-                          <td>{item.category}</td>
-                          <td>{item.date}</td>
-                          <td>
-                            <div style={{ cursor: "pointer" }}>
-                              <ConfirmationModal
-                                item={item}
-                                handleConfirm={() => deleteTransaction(item.id)}
-                              />
-                            </div>
-                          </td>
-                        </tr>
+                        <ItemTable
+                          item={item}
+                          handleConfirm={() => deleteTransaction(item.id)}
+                        />
                       ))}
                     </>
                   ) : (
                     <>
                       {currentItensFiltered.map((item: any) => (
-                        <tr key={item.id}>
-                          <td width="50%">{item.description}</td>
-                          <td width="20%">
-                            <PriceHighlight type={item.transactionType}>
-                              {item.transactionType === "negative" && "-"}{" "}
-                              {priceFormatted.format(item.amount)}
-                            </PriceHighlight>
-                          </td>
-                          <td>{item.category}</td>
-                          <td>{item.date}</td>
-                          <td>
-                            <div style={{ cursor: "pointer" }}>
-                              <ConfirmationModal
-                                item={item}
-                                handleConfirm={() => deleteTransaction(item.id)}
-                              />
-                            </div>
-                          </td>
-                        </tr>
+                        <ItemTable
+                          item={item}
+                          handleConfirm={() => deleteTransaction(item.id)}
+                        />
                       ))}
                     </>
                   )}

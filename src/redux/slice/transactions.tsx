@@ -15,7 +15,7 @@ const transactionSlice = createSlice({
   initialState: INITIAL_STATE,
   reducers: {
     addTransaction: (state, { payload }) => {
-      return [...state, payload];
+      return [payload, ...state];
     },
     removeTransaction: (state, { payload }) => {
       return (state = state.filter((item: any) => item.id !== payload));
