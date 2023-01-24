@@ -14,13 +14,15 @@ function SelectOrder({ order, setOrder }: SelectProps) {
           style={{
             width: 150,
             height: 50,
-            backgroundColor: "#9A9A9A",
+            backgroundColor: "transparent",
             border: "none",
             color: "#ffffff",
+            position: "absolute",
+            marginTop: -50,
           }}
         >
           <Select.Icon>
-            <Funnel />
+            <Funnel />{" "}
           </Select.Icon>
           <Select.Value placeholder="Filtro" />
         </Select.Trigger>

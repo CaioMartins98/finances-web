@@ -9,7 +9,7 @@ function Transactions() {
     <div>
       <Header />
       <Summary />
-      <SearchForm />
+
       <Table />
     </div>
   );

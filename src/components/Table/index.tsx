@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import {
@@ -17,6 +17,7 @@ import { Funnel, Check } from "phosphor-react";
 import * as Select from "@radix-ui/react-select";
 import { toast } from "react-hot-toast";
 import SelectOrder from "../SelectOrder";
+import SearchForm from "../SearchForm";
 
 interface ItemTableProps {
   item: {
@@ -35,14 +36,14 @@ const ItemTable = ({ item, handleConfirm }: ItemTableProps) => {
     <>
       <tr key={item.id}>
         <td width="40%">{item.description}</td>
-        <td width="30%">
+        <td width="40%">
           <PriceHighlight type={item.transactionType}>
             {item.transactionType === "negative" && "-"}{" "}
             {priceFormatted.format(item.amount)}
           </PriceHighlight>
         </td>
-        <td>{item.category}</td>
-        <td>{item.date}</td>
+        <td width="30%">{item.category}</td>
+        <td width="30%">{item.date}</td>
         <td>
           <div style={{ cursor: "pointer" }}>
             <ConfirmationModal item={item} handleConfirm={handleConfirm} />
@@ -57,29 +58,35 @@ function Table() {
   const transactions = useSelector((state: RootState) => state.transactions);
   const dispatch = useDispatch();
   const [order, setOrder] = useState("all");
-
-  const [itensPerPage, setItensPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(0);
+  const [itensPerPage] = useState(5);
 
-  const [itensPerPageFiltered, setItensPerPageFiltered] = useState(5);
-  const [currentPageFiltered, setCurrentPageFiltered] = useState(0);
-
-  const pages = Math.ceil(transactions.transactions.length / itensPerPage);
-  const startIndex = currentPage * itensPerPage;
-  const endIndex = startIndex + itensPerPage;
-  const currentItens = transactions.transactions.slice(startIndex, endIndex);
-
+  const [searchTerm, setSearchTerm] = useState("");
   const filter = transactions.transactions.filter(
     (transaction: any) => transaction.transactionType === order
   );
+  const filteredTransactions = useMemo(() => {
+    return transactions.transactions.filter((transaction) => {
+      return (
+        transaction.description
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        transaction.category.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
+  }, [transactions, searchTerm]);
 
-  const pagesFiltered = Math.ceil(filter.length / itensPerPageFiltered);
-  const startIndexFiltered = currentPageFiltered * itensPerPageFiltered;
-  const endIndexFiltered = startIndexFiltered + itensPerPageFiltered;
-  const currentItensFiltered = filter.slice(
-    startIndexFiltered,
-    endIndexFiltered
-  );
+  useEffect(() => {
+    searchTerm.length > 0 && setCurrentPage(0);
+  }, [searchTerm]);
+
+  const pages = useMemo(() => {
+    return Math.ceil(filteredTransactions.length / itensPerPage);
+  }, [filteredTransactions, itensPerPage]);
+
+  const startIndex = currentPage * itensPerPage;
+  const endIndex = startIndex + itensPerPage;
+  const currentItens = filteredTransactions.slice(startIndex, endIndex);
 
   const deleteTransaction = (id: string) => {
     dispatch(removeTransaction(id));
@@ -97,69 +104,46 @@ function Table() {
     });
   };
 
-  useEffect(() => {
-    setCurrentPage(0);
-    setCurrentPageFiltered(0);
-  }, [order]);
+  const handleConfirm = (id: string) => {
+    deleteTransaction(id);
+  };
 
   return (
     <>
-      <SelectOrder order={order} setOrder={setOrder} />
-      {order === "all" ? (
-        <>
+      {/* <SelectOrder order={order} setOrder={setOrder} /> */}
+
+      <SearchForm searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      {filteredTransactions.length === 0 && (
+        <EmptyContainer>
+          <img src={emptyImg} alt="Empty" />
+          <EmptyMessage>Não há transações</EmptyMessage>
+        </EmptyContainer>
+      )}
+      {filteredTransactions.length > 0 && (
+        <TransactionsContainer>
           <Pagination
-            currentPage={currentPage}
+            limit={4}
             pages={pages}
+            currentPage={currentPage}
             setCurrentPage={setCurrentPage}
           />
-        </>
-      ) : (
-        <>
-          {" "}
-          <Pagination
-            currentPage={currentPageFiltered}
-            pages={pagesFiltered}
-            setCurrentPage={setCurrentPageFiltered}
-          />
-        </>
-      )}
-
-      <TransactionsContainer>
-        {transactions.transactions.length > 0 ? (
           <>
             <TransactionsTable>
               <tbody>
                 <>
-                  {order === "all" ? (
-                    <>
-                      {currentItens.map((item: any) => (
-                        <ItemTable
-                          item={item}
-                          handleConfirm={() => deleteTransaction(item.id)}
-                        />
-                      ))}
-                    </>
-                  ) : (
-                    <>
-                      {currentItensFiltered.map((item: any) => (
-                        <ItemTable
-                          item={item}
-                          handleConfirm={() => deleteTransaction(item.id)}
-                        />
-                      ))}
-                    </>
-                  )}
+                  {currentItens.map((item) => (
+                    <ItemTable
+                      key={item.id}
+                      item={item}
+                      handleConfirm={() => handleConfirm(item.id)}
+                    />
+                  ))}
                 </>
               </tbody>
             </TransactionsTable>
           </>
-        ) : (
-          <EmptyContainer>
-            <img src={emptyImg} alt="" />
-            <EmptyMessage>Lista de transações vazia!</EmptyMessage>
-          </EmptyContainer>
-        )}
-      </TransactionsContainer>
+        </TransactionsContainer>
+      )}
     </>
   );
 }

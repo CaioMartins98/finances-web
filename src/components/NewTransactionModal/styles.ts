@@ -21,7 +21,10 @@ export const Body = styled(ModalBody)`
     background: ${({ theme }) => theme["gray-900"]};
     color: ${({ theme }) => theme["gray-300"]};
     padding: 1rem;
-
+    :focus {
+      outline: 0;
+      box-shadow: 0 0 0 2px ${(props) => props.theme["green-500"]};
+    }
     &::placeholder {
       color: ${({ theme }) => theme["gray-500"]};
     }

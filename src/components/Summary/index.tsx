@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   AmountCard,
   HeaderCard,
@@ -11,29 +11,33 @@ import { defaultTheme } from "../../styles/themes/default";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { priceFormatted } from "../../utils/formatter";
+
 function Summary() {
   const { transactions } = useSelector(
     (state: RootState) => state.transactions
   );
 
-  const summary = transactions.reduce(
-    (acc: any, transaction: any) => {
-      if (transaction.transactionType === "positive") {
-        acc.positive += transaction.amount;
-        acc.total += transaction.amount;
-      } else {
-        acc.negative += transaction.amount;
-        acc.total -= transaction.amount;
-      }
+  const summary = useMemo(() => {
+    return transactions.reduce(
+      (acc: any, transaction: any) => {
+        if (transaction.transactionType === "positive") {
+          acc.positive += transaction.amount;
+          acc.total += transaction.amount;
+        } else {
+          acc.negative += transaction.amount;
+          acc.total -= transaction.amount;
+        }
 
-      return acc;
-    },
-    {
-      positive: 0,
-      negative: 0,
-      total: 0,
-    }
-  );
+        return acc;
+      },
+      {
+        positive: 0,
+        negative: 0,
+        total: 0,
+      }
+    );
+  }, [transactions]);
+
   return (
     <SummaryContainer>
       <SummaryCard>
