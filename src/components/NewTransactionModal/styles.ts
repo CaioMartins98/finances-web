@@ -6,15 +6,62 @@ interface TypeTransactionButtonProps {
   typeTransaction: "positive" | "negative";
   isActive: boolean;
 }
+// export const ModalContainer = styled(Modal)`
+//   * {
+//     background-color: ${(props) => props.theme["gray-800"]};
+//   }
+// `;
+
+// export const Body = styled(ModalBody)`
+//   input {
+//     flex: 1;
+//     border-radius: 6px;
+//     border: 0;
+//     margin-bottom: 10px;
+//     background: ${({ theme }) => theme["gray-900"]};
+//     color: ${({ theme }) => theme["gray-300"]};
+//     padding: 1rem;
+//     :focus {
+//       outline: 0;
+//       box-shadow: 0 0 0 2px ${(props) => props.theme["green-500"]};
+//     }
+//     &::placeholder {
+//       color: ${({ theme }) => theme["gray-500"]};
+//     }
+//   }
+//   @media (max-width: 767px) {
+//     height: 100vh;
+//     align-items: center;
+//   }
+// `;
+
+// export const Title = styled.span``;
+
+// export const HeaderModal = styled(ModalHeader)``;
+
+// export const Close = styled(Dialog.Close)`
+//   background-color: transparent;
+//   cursor: pointer;
+//   outline: 0;
+//   border: 0;
+//   line-height: 0;
+//   color: ${({ theme }) => theme["gray-300"]};
+// `;
+
 export const ModalContainer = styled(Modal)`
   * {
     background-color: ${(props) => props.theme["gray-800"]};
+  }
+
+  @media (max-width: 576px) {
+    .modal-dialog {
+      width: 90%;
+    }
   }
 `;
 
 export const Body = styled(ModalBody)`
   input {
-    flex: 1;
     border-radius: 6px;
     border: 0;
     margin-bottom: 10px;
@@ -28,16 +75,32 @@ export const Body = styled(ModalBody)`
     &::placeholder {
       color: ${({ theme }) => theme["gray-500"]};
     }
+
+    width: 100%;
+    @media (min-width: 768px) {
+      align-items: center;
+    }
   }
+
   @media (max-width: 767px) {
-    height: 100vh;
+    height: 60vh;
     align-items: center;
   }
 `;
 
-export const Title = styled.span``;
+export const Title = styled.span`
+  @media (max-width: 576px) {
+    font-size: 1.2rem;
+    padding: 0.5rem;
+  }
+`;
 
-export const HeaderModal = styled(ModalHeader)``;
+export const HeaderModal = styled(ModalHeader)`
+  @media (max-width: 576px) {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+  }
+`;
 
 export const Close = styled(Dialog.Close)`
   background-color: transparent;
@@ -46,6 +109,11 @@ export const Close = styled(Dialog.Close)`
   border: 0;
   line-height: 0;
   color: ${({ theme }) => theme["gray-300"]};
+
+  @media (max-width: 576px) {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+  }
 `;
 
 export const ButtonRegister = styled.button`
@@ -61,10 +129,6 @@ export const ButtonRegister = styled.button`
   &:hover {
     transition: 300ms;
     background: ${(props) => props.theme["green-700"]};
-  }
-
-  @media (max-width: 767px) {
-    margin-top: 150px;
   }
 `;
 
