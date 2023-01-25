@@ -1,10 +1,11 @@
-import React from "react";
 import { SearchFormContainer } from "./styles";
 import { MagnifyingGlass } from "phosphor-react";
+
 interface SearchProps {
   searchTerm: string;
   setSearchTerm: (value: any) => void;
 }
+
 function SearchForm({ searchTerm, setSearchTerm }: SearchProps) {
   return (
     <SearchFormContainer>

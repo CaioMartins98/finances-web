@@ -1,16 +1,14 @@
 import React from "react";
 import { Button, Container, ButtonField } from "./styles";
-import {
-  CaretDoubleLeft,
-  CaretDoubleRight,
-  FunnelSimple,
-} from "phosphor-react";
+import { CaretDoubleLeft, CaretDoubleRight } from "phosphor-react";
+
 interface PaginationProps {
   pages: number;
   currentPage: number;
   setCurrentPage: (value: any) => void;
   limit: number;
 }
+
 function Pagination({
   pages,
   currentPage,
@@ -19,13 +17,24 @@ function Pagination({
 }: PaginationProps) {
   const pageList = Array.from(Array(pages), (item, index) => index + 1);
 
-  const start = currentPage - Math.floor(limit / 2);
-  const end = currentPage + Math.floor(limit / 1);
+  let start = currentPage - Math.floor(limit / 2);
+  let end = currentPage + Math.floor(limit / 2);
 
-  const visiblePages = pageList.slice(
-    start > 0 ? start : 0,
-    end <= pages ? end : pages
-  );
+  if (start < 0) {
+    start = 0;
+    end = limit;
+  }
+  if (end > pages) {
+    end = pages;
+    start = pages - limit;
+  }
+
+  const visiblePages = pageList.slice(start, end);
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const value = parseInt((e.currentTarget as HTMLButtonElement).value, 10);
+    isNaN(value) ? null : setCurrentPage(value);
+  };
 
   return (
     <>
@@ -35,9 +44,7 @@ function Pagination({
             {" "}
             <ButtonField
               value={0}
-              onClick={(e) =>
-                setCurrentPage(Number((e.target as HTMLInputElement).value))
-              }
+              onClick={handleClick}
               disabled={currentPage === 0}
             >
               <CaretDoubleLeft />
@@ -52,9 +59,13 @@ function Pagination({
             key={page}
             isActive={page === currentPage + 1}
             value={page - 1}
-            onClick={(e) =>
-              setCurrentPage(Number((e.target as HTMLInputElement).value))
-            }
+            onClick={(e) => {
+              const value = parseInt(
+                (e.currentTarget as HTMLInputElement).value,
+                10
+              );
+              isNaN(value) ? null : setCurrentPage(value);
+            }}
           >
             {page}
           </Button>
@@ -63,9 +74,13 @@ function Pagination({
         {pages > 1 ? (
           <ButtonField
             value={pages - 1}
-            onClick={(e) =>
-              setCurrentPage(Number((e.target as HTMLInputElement).value))
-            }
+            onClick={(e) => {
+              const value = parseInt(
+                (e.currentTarget as HTMLInputElement).value,
+                10
+              );
+              isNaN(value) ? null : setCurrentPage(value);
+            }}
             disabled={currentPage === pages - 1}
           >
             <CaretDoubleRight />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import {
@@ -13,10 +13,7 @@ import { removeTransaction } from "../../redux/slice/transactions";
 import ConfirmationModal from "../ConfirmationModal";
 import { priceFormatted } from "../../utils/formatter";
 import Pagination from "../Pagination";
-import { Funnel, Check } from "phosphor-react";
-import * as Select from "@radix-ui/react-select";
 import { toast } from "react-hot-toast";
-import SelectOrder from "../SelectOrder";
 import SearchForm from "../SearchForm";
 
 interface ItemTableProps {
@@ -57,14 +54,10 @@ const ItemTable = ({ item, handleConfirm }: ItemTableProps) => {
 function Table() {
   const transactions = useSelector((state: RootState) => state.transactions);
   const dispatch = useDispatch();
-  const [order, setOrder] = useState("all");
   const [currentPage, setCurrentPage] = useState(0);
   const [itensPerPage] = useState(5);
-
   const [searchTerm, setSearchTerm] = useState("");
-  const filter = transactions.transactions.filter(
-    (transaction: any) => transaction.transactionType === order
-  );
+
   const filteredTransactions = useMemo(() => {
     return transactions.transactions.filter((transaction) => {
       return (
@@ -122,7 +115,7 @@ function Table() {
       {filteredTransactions.length > 0 && (
         <TransactionsContainer>
           <Pagination
-            limit={4}
+            limit={6}
             pages={pages}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}

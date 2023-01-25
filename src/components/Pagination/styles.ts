@@ -1,6 +1,8 @@
 import styled, { css } from "styled-components";
 interface ButtonProps {
   isActive: boolean;
+  value: number | string;
+  onClick: (event: React.MouseEvent<HTMLInputElement>) => void;
 }
 export const Container = styled.div`
   display: flex;

@@ -5,8 +5,8 @@ interface TransactionsProps {
   description: string;
   amount: number;
   category: string;
-  date: Date;
-  transactionType: string;
+  date: string;
+  transactionType: "positive" | "negative";
 }
 const INITIAL_STATE: TransactionsProps[] = [];
 

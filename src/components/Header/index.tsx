@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import logo from "../../assets/logo.png";
 import NewTransactionModal from "../NewTransactionModal";
 import { Container, HeaderContent, NewTransactionButton } from "./styles";

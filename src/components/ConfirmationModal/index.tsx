@@ -13,7 +13,7 @@ import {
   Root,
   Title,
 } from "./styles";
-import { X, TrashSimple, Trash } from "phosphor-react";
+import { Trash } from "phosphor-react";
 import { priceFormatted } from "../../utils/formatter";
 interface ItemProps {
   description: string;
