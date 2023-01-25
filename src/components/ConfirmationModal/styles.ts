@@ -7,9 +7,6 @@ interface TypeTransactionButtonProps {
 }
 export const Root = styled(Dialog.Root)`
   width: 100%;
-  @media (min-width: 768px) {
-    width: 100px;
-  }
 `;
 
 export const Overlay = styled(Dialog.Overlay)`
@@ -20,9 +17,8 @@ export const Overlay = styled(Dialog.Overlay)`
   background-color: rgba(0, 0, 0, 0.65);
 `;
 export const Content = styled(Dialog.Content)`
-  min-width: 30rem;
+  min-width: 20rem;
   border-radius: 6px;
-
   background-color: ${(props) => props.theme["gray-800"]};
   position: fixed;
 
